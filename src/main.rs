@@ -97,24 +97,11 @@ fn registration(item: web::Json<SentWeightData>) {
     let _ = db.insert(&key, item.total.as_bytes().to_vec());
 }
 
-fn delete_db(item: web::Json<SentWeightData>) {
-    let token = fs::read_to_string("/home/index197511/body_weight_meter/src/token.txt")
-        .unwrap()
-        .replace("\n", "");
-    if token != item.token {
-        return;
-    }
-
-    let db = Db::open("weight_storage").unwrap();
-    let _ = db.clear();
-}
-
 fn app_config(config: &mut web::ServiceConfig) {
     config.service(
         web::scope("")
-            .service(web::resource("/show").route(web::get().to(show)))
-            .service(web::resource("/post").route(web::post().to(registration)))
-            .service(web::resource("/delete").route(web::post().to(delete_db))),
+            .service(web::resource("/bodyWeightInfo").route(web::get().to(show)))
+            .service(web::resource("/bodyWeightInfo").route(web::post().to(registration)))
     );
 }
 
